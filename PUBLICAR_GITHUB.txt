@@ -1,0 +1,45 @@
+PUBLICAR EN GITHUB PAGES
+
+Opcion facil desde la web:
+
+1. Entra a github.com e inicia sesion.
+2. Crea un repositorio nuevo. Por ejemplo:
+   mundial-2026-bracket
+3. Sube estos archivos de la carpeta mundial-2026-public:
+   - index.html
+   - manifest.webmanifest
+   - icon.svg
+   - service-worker.js
+   - abrir-en-red-local.bat
+   - COMO_ABRIR.txt
+   - PUBLICAR_GITHUB.txt
+4. En el repositorio, ve a Settings > Pages.
+5. En "Build and deployment", selecciona:
+   Source: Deploy from a branch
+   Branch: main
+   Folder: /root
+6. Guarda.
+7. GitHub te dara un link parecido a:
+   https://TU-USUARIO.github.io/mundial-2026-bracket/
+
+Ese link lo puedes enviar por WhatsApp, correo o chat, y abre en telefono o PC.
+
+COMO INSTALARLO COMO APP
+
+Cuando ya este publicado por GitHub Pages:
+
+En Android / Chrome:
+1. Abre el link.
+2. Menu de Chrome.
+3. Toca "Agregar a pantalla principal" o "Instalar app".
+
+En iPhone / Safari:
+1. Abre el link.
+2. Toca Compartir.
+3. Toca "Agregar a pantalla de inicio".
+
+En PC / Chrome o Edge:
+1. Abre el link.
+2. Busca el icono de instalar en la barra de direcciones, o menu > Apps > Instalar.
+
+Nota: para que la app instale bien, debe abrirse desde https, por eso GitHub Pages sirve perfecto.
