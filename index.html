@@ -206,7 +206,7 @@
     }
 
     .team-pin {
-      width: 86px;
+      width: 48px;
       min-height: 48px;
     }
 
@@ -220,12 +220,12 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      min-width: 72px;
-      padding: 2px 5px 2px 2px;
+      gap: 0;
+      min-width: 0;
+      padding: 0;
       border-radius: 999px;
-      background: rgba(0, 0, 0, .22);
-      box-shadow: 0 7px 15px rgba(0,0,0,.25);
+      background: transparent;
+      box-shadow: none;
     }
 
     .ball {
@@ -258,30 +258,30 @@
     .crest {
       position: absolute;
       z-index: 2;
-      left: 50%;
-      top: 50%;
-      width: 32px;
-      height: 34px;
+      left: 22px;
+      top: -22px;
+      width: 30px;
+      height: 32px;
       object-fit: contain;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       filter: drop-shadow(0 3px 4px rgba(0,0,0,.72));
     }
 
     .fallback {
       position: absolute;
       z-index: 1;
-      left: 50%;
-      top: 50%;
+      left: 22px;
+      top: -22px;
       display: none;
       place-items: center;
-      width: 33px;
-      height: 36px;
+      width: 30px;
+      height: 32px;
       color: white;
       font-size: .58rem;
       font-weight: 950;
       clip-path: polygon(50% 0, 94% 18%, 84% 77%, 50% 100%, 16% 77%, 6% 18%);
       text-shadow: 0 1px 2px rgba(0,0,0,.72);
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
     }
 
     .ball.no-crest .fallback,
@@ -327,7 +327,52 @@
       border-radius: 50%;
       border: 1.5px solid rgba(255,255,255,.28);
       object-fit: cover;
+      object-position: center;
+      background: #111;
       box-shadow: 0 0 0 3px rgba(74, 202, 125, .13), 0 7px 15px rgba(0,0,0,.4);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, .55);
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-backdrop.open {
+      display: grid;
+    }
+
+    .result-modal {
+      position: relative;
+      width: min(420px, calc(100vw - 28px));
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 8px;
+      background: rgba(31, 32, 30, .98);
+      box-shadow: 0 24px 70px rgba(0,0,0,.6);
+      overflow: hidden;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      min-height: 34px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.28);
+      color: #fff;
+      font-size: 1.2rem;
+      line-height: 1;
     }
 
     .advance-fallback {
@@ -553,12 +598,18 @@
 
     @media (max-width: 760px) {
       main {
-        width: min(100vw - 14px, 760px);
-        padding-top: 12px;
+        width: calc(100vw - 8px);
+        padding-top: 8px;
       }
 
       header {
         grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: clamp(1.5rem, 8vw, 2.2rem);
       }
 
       .status {
@@ -570,16 +621,74 @@
       }
 
       .stage {
-        overflow-x: auto;
+        overflow: visible;
       }
 
       .arena {
-        width: 760px;
-        height: 760px;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 1 / 1;
       }
 
       aside {
         grid-template-columns: 1fr;
+      }
+
+      .team-pin {
+        width: 34px;
+        min-height: 34px;
+      }
+
+      .team-token {
+        min-width: 0;
+        gap: 0;
+        padding: 0;
+      }
+
+      .ball {
+        width: 30px;
+        height: 30px;
+      }
+
+      .crest {
+        width: 24px;
+        height: 26px;
+      }
+
+      .fallback {
+        width: 25px;
+        height: 27px;
+        font-size: .46rem;
+      }
+
+      .team-code {
+        font-size: .52rem;
+      }
+
+      .advance-pin {
+        width: 32px;
+        height: 32px;
+      }
+
+      .advance-ball {
+        width: 28px;
+        height: 28px;
+      }
+
+      .center {
+        width: 96px;
+        height: 96px;
+      }
+
+      .cup {
+        width: 47px;
+        height: 62px;
+      }
+
+      .center-title {
+        top: calc(50% + 58px);
+        font-size: .52rem;
       }
     }
   </style>
@@ -643,6 +752,13 @@
       Actualiza desde el scoreboard publico de <a href="https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard" target="_blank" rel="noreferrer">ESPN FIFA World Cup</a>. Si no hay conexion o el navegador bloquea la llamada, usa los datos locales embebidos. No usa servidor local ni accede a carpetas/redes internas.
     </footer>
   </main>
+
+  <div class="modal-backdrop" id="resultModal" aria-hidden="true">
+    <section class="result-modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+      <button class="modal-close" id="closeModal" type="button" aria-label="Cerrar">×</button>
+      <div class="details" id="modalDetails"></div>
+    </section>
+  </div>
 
   <script>
     const teams = {
@@ -713,6 +829,7 @@
     const qfPairs = [[0, 1], [2, 3], [4, 5], [6, 7]];
     let geometry = {};
     let laterResults = [];
+    let winPathQueue = [];
 
     function team(name, flag, fifa, colors, crest) {
       return {
@@ -742,7 +859,16 @@
       const el = document.createElementNS("http://www.w3.org/2000/svg", "path");
       el.setAttribute("d", d);
       el.setAttribute("class", `branch ${cls}`);
-      svg.appendChild(el);
+      if (cls === "win") {
+        winPathQueue.push(el);
+      } else {
+        svg.appendChild(el);
+      }
+    }
+
+    function flushWinPaths(svg) {
+      winPathQueue.forEach(el => svg.appendChild(el));
+      winPathQueue = [];
     }
 
     function organicPath(a, b, bend = 0) {
@@ -798,6 +924,7 @@
       arena.querySelectorAll(".team-pin,.advance-pin,.node").forEach(el => el.remove());
       svg.innerHTML = "";
       geometry = { matchPoints: [], r16Points: [], qfPoints: [], sfPoints: [] };
+      winPathQueue = [];
 
       const start = -7.5;
       const gap = 360 / matches.length;
@@ -881,6 +1008,8 @@
         }
       }
 
+      flushWinPaths(svg);
+
       document.querySelectorAll(".crest").forEach(img => {
         img.addEventListener("load", () => {
           img.closest(".team-token")?.classList.remove("no-crest");
@@ -934,10 +1063,8 @@
       return `
         <span class="team-token">
           <span class="ball">
-            <img class="crest" alt="Escudo ${data.name}" src="${data.crest}" onerror="this.style.display='none';this.closest('.team-token').classList.add('no-crest')">
-            <span class="fallback" aria-hidden="true" style="background:linear-gradient(135deg,${data.colors[0]},${data.colors[1]})">${data.fifa}</span>
+            <img class="flag" alt="Bandera ${data.name}" src="https://flagcdn.com/w80/${data.flag}.png">
           </span>
-          <span class="team-code">${data.fifa}</span>
         </span>
         ${withLabel ? `<span class="team-label">${data.name}</span>` : ""}
       `;
@@ -1004,6 +1131,43 @@
         <p><b>Rival:</b> ${opponent ? teams[opponent].name : "Por definir"}.</p>
         <p><b>Partido:</b> ${matchData.id ? "M" + matchData.id : matchData.round || "Ronda posterior"}, ${matchData.date}.</p>
       `;
+    }
+
+    function showDetails(code, matchData, extraLabel = "") {
+      const t = teams[code];
+      const opponent = matchData?.sides?.find(s => s !== code);
+      const won = matchData?.winner === code;
+      const eliminated = matchData?.winner && !won;
+      const score = matchData?.score ? `${teams[matchData.sides[0]].name} ${matchData.score[0]} - ${matchData.score[1]} ${teams[matchData.sides[1]].name}` : `${teams[matchData.sides[0]].name} vs ${teams[matchData.sides[1]].name}`;
+      const state = won ? "Avanzo" : eliminated ? "Eliminado" : "Pendiente";
+      const content = `
+        <div class="big">
+          <span class="mini-ball"><img alt="Bandera ${t.name}" src="https://flagcdn.com/w80/${t.flag}.png"></span>
+          <div>
+            <h3 id="resultTitle">${t.name}</h3>
+            <p>${t.fifa}${extraLabel ? " · " + extraLabel : ""}</p>
+          </div>
+        </div>
+        <div class="scoreline">${score}</div>
+        <p><b>Estado:</b> ${state}. ${matchData.note}</p>
+        <p><b>Rival:</b> ${opponent ? teams[opponent].name : "Por definir"}.</p>
+        <p><b>Partido:</b> ${matchData.id ? "M" + matchData.id : matchData.round || "Ronda posterior"}, ${matchData.date}.</p>
+      `;
+      document.getElementById("details").innerHTML = content;
+      document.getElementById("modalDetails").innerHTML = content;
+      openModal();
+    }
+
+    function openModal() {
+      const modal = document.getElementById("resultModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("resultModal");
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
     }
 
     function renderPanels() {
@@ -1083,6 +1247,13 @@
     }
 
     document.getElementById("refreshBtn").addEventListener("click", updateFromEspn);
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    document.getElementById("resultModal").addEventListener("click", event => {
+      if (event.target.id === "resultModal") closeModal();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeModal();
+    });
     render();
     updateFromEspn();
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
